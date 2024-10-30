@@ -3,12 +3,21 @@
 set -e # Exit immediately if any command returns a non-zero error code
 
 echo "Starting slurmd entrypoint script"
+
+echo "Loaded plugins:"
+for file in /usr/lib/x86_64-linux-gnu/slurm/*; do
+    echo "  $file"
+done
+
 if [ -n "${CGROUP_V2}" ]; then
     CGROUP_PATH=''
+    echo "cat /proc/self/cgroup"
+    cat /proc/self/cgroup
     if [ "$SLURM_CLUSTER_TYPE" = "gpu" ]; then
         CGROUP_PATH=$(cat /proc/self/cgroup | awk -F'/' '{print "/"$2"/"$3"/"$4}')
     else
-        CGROUP_PATH=$(cat /proc/self/cgroup | awk -F'/' '{print "/"$2"/"$3}')
+        # In kind, this should also be 3 layer depth
+        CGROUP_PATH=$(cat /proc/self/cgroup | awk -F'/' '{print "/"$2"/"$3"/"$4}')
     fi
 
     if [ -n "${CGROUP_PATH}" ]; then

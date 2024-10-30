@@ -37,7 +37,7 @@ controllerManager:
     image:
       repository: cr.eu-north1.nebius.cloud/soperator/slurm-operator
       tag: 1.14.14
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     resources:
       limits:
         memory: 128Mi
