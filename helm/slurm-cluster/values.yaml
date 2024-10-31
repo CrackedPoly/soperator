@@ -43,31 +43,25 @@ k8sNodeFilters:
       #                      - "node-group-id-here"
   - name: spread-worker
     affinity:
-      podAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
               matchLabels:
                 app.kubernetes.io/component: worker
             topologyKey: kubernetes.io/hostname
   - name: spread-controller
     affinity:
-      podAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
               matchLabels:
                 app.kubernetes.io/component: controller
             topologyKey: kubernetes.io/hostname
   - name: spread-login
     affinity:
-      podAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
               matchLabels:
                 app.kubernetes.io/component: login
             topologyKey: kubernetes.io/hostname
@@ -210,7 +204,7 @@ slurmNodes:
         ephemeral: false
         resizeInUseVolumes: false
         size: 30Gi
-        storageClassName: "standard"
+        storageClassName: "nfs"
         # volumeClaimTemplate: ""
         waitForVolumeResize: false
       podSecurityContext: {}
@@ -299,7 +293,7 @@ slurmNodes:
     volumes:
       spool:
         volumeClaimTemplateSpec:
-          storageClassName: "standard"
+          storageClassName: "nfs"
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
